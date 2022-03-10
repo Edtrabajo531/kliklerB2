@@ -14,6 +14,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group([
+    'middleware' => ['api', 'cors'],
+], function () {
+    Route::get('prueba', 'front\UserController@prueba');
+    Route::get('view-mail', 'front\UserController@viewMail');
+    Route::get('prueba-mail', 'front\UserController@pruebaMail');
+
+    
+    // AUTH
+    Route::post('recover-password-request', 'front\UserController@recover_password_request');
+    Route::post('login', 'front\UserController@login');
+    Route::post('register', 'front\UserController@register');
+    Route::get('confirmar-correo/{email}/{token}', 'front\UserController@confirm_mail');
+    Route::post('resend-email-confirm/{email}', 'front\UserController@resend_email_confirm');
+    Route::post('recover-password-verify', 'front\UserController@recover_password_verify');
+    Route::post('recover-password', 'front\UserController@recover_password');
+
+    Route::post('get-auth', 'front\UserController@getAuth');
+
+    
 });
