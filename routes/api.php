@@ -31,7 +31,11 @@ Route::group([
     Route::post('recover-password-verify', 'front\UserController@recover_password_verify');
     Route::post('recover-password', 'front\UserController@recover_password');
 
-    Route::post('get-auth', 'front\UserController@getAuth');
+    Route::group([
+        'middleware' => ['auth:api'],
+    ], function () {
+        Route::post('get-auth', 'front\UserController@getAuth');
+    });
 
     
 });
