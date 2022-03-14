@@ -20,7 +20,6 @@ Route::group([
     Route::get('prueba', 'front\UserController@prueba');
     Route::get('view-mail', 'front\UserController@viewMail');
     Route::get('prueba-mail', 'front\UserController@pruebaMail');
-
     
     // AUTH
     Route::post('recover-password-request', 'front\UserController@recover_password_request');
@@ -35,6 +34,15 @@ Route::group([
         'middleware' => ['auth:api'],
     ], function () {
         Route::post('get-auth', 'front\UserController@getAuth');
+
+        Route::group([
+            'middleware' => ['admin'],
+        ], function () {
+            Route::post('plans', 'admin\PlanController@list');
+            Route::post('plan-store', 'admin\PlanController@store');
+            Route::post('plan-update', 'admin\PlanController@update');
+            Route::post('plan-delete', 'admin\PlanController@delete');
+        });
     });
 
     

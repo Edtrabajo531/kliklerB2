@@ -24,7 +24,6 @@ class UserController extends Controller
 
     public function viewMail(){
         // return "XX";
-        
         return view('mails.confirm_email');
     }
     public function pruebaMail(){
