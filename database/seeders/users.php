@@ -23,5 +23,52 @@ class users extends Seeder
             'role'=>'administrador-p',
             'token_email'=>Null,
         ]);
+
+        DB::table('users')->insert([
+            'alias'=>'Edwar',
+            'name'=>'Edwar Villavicencio',
+            'email'=>'eavc53189@gmail.com',
+            'password'=>bcrypt('12345678'),
+            "email_verified_at"=>'2022-02-02 00:00:00',
+            'role'=>'cliente',
+            'token_email'=>Null,
+        ]);
+
+        DB::table('plans')->insert([
+            'name'=>'Gratis',
+            'cost'=>0,
+            'profit'=>0,
+            'total_profit'=>0,
+            'duration'=>0,
+            'charge_limit'=>0,
+            'products'=>2
+        ]);
+        
+        DB::table('plans')->insert([
+            'name'=>'AVATAR',
+            'cost'=>50,
+            'profit'=>5,
+            'total_profit'=>"2,5",
+            'duration'=>1,
+            'charge_limit'=>20,
+            'products'=>30
+        ]);
+
+        DB::table('plans')->insert([
+            'name'=>'ASSISTANT',
+            'cost'=>100,
+            'profit'=>"5,83",
+            'total_profit'=>"2,5",
+            'duration'=>1,
+            'charge_limit'=>20,
+            'products'=>30
+        ]);
+
+        DB::table('licenses')->insert([
+            'cost'=>99,
+        ]);
+        
+        
+
     }
 }

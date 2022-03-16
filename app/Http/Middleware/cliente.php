@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Auth;
-class client
+class cliente
 {
     /**
      * Handle an incoming request.
@@ -16,7 +16,6 @@ class client
      */
     public function handle(Request $request, Closure $next)
     {
-       
         if(Auth::user()->status == 'disabled'){
             return response()->json([
                 'message' => "usuario-bloqueado"

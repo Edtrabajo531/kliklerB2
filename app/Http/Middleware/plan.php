@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Auth;
-class client
+class plan
 {
     /**
      * Handle an incoming request.
@@ -16,16 +16,11 @@ class client
      */
     public function handle(Request $request, Closure $next)
     {
-       
-        if(Auth::user()->status == 'disabled'){
+        if(Auth::check() and Auth::user()->role == 'cliente' and Auth::user()->userplan_id == Null){
             return response()->json([
-                'message' => "usuario-bloqueado"
+                'message' => "sin-plan"
             ], 401); // Status code here
-        }else if(Auth::user()->role == "cliente"){
-            return $next($request);
         }
-        return response()->json([
-            'message' => "role-sin-permisos"
-        ], 401); // Status code here
+        return $next($request);
     }
 }

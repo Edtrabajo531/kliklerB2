@@ -30,20 +30,50 @@ Route::group([
     Route::post('recover-password-verify', 'front\UserController@recover_password_verify');
     Route::post('recover-password', 'front\UserController@recover_password');
 
+    Route::post('plans', 'admin\PlanController@list');
+   
+
     Route::group([
         'middleware' => ['auth:api'],
     ], function () {
         Route::post('get-auth', 'front\UserController@getAuth');
+        Route::post('bank-accounts', 'admin\BankAccountController@list');
 
         Route::group([
-            'middleware' => ['admin'],
+            'middleware' => ['admin'],'prefix'=>'admin'
         ], function () {
-            Route::post('plans', 'admin\PlanController@list');
             Route::post('plan-store', 'admin\PlanController@store');
             Route::post('plan-update', 'admin\PlanController@update');
-            Route::post('plan-delete', 'admin\PlanController@delete');
+            Route::post('plan-delete/{id}', 'admin\PlanController@delete');
+
+             // bancos
+             Route::post('bank-accounts', 'admin\BankAccountController@list');
+             Route::post('bank-account/{id}', 'admin\BankAccountController@get');
+             Route::post('bank-account-store', 'admin\BankAccountController@store');
+             Route::post('bank-account-update', 'admin\BankAccountController@update');
+             Route::post('bank-account-delete/{id}', 'admin\BankAccountController@delete');
+
+              // Carteras
+              Route::post('wallets', 'admin\WalletController@list');
+              Route::post('wallet/{id}', 'admin\WalletController@get');
+              Route::post('wallet-store', 'admin\WalletController@store');
+              Route::post('wallet-update', 'admin\WalletController@update');
+              Route::post('wallet-delete/{id}', 'admin\WalletController@delete');
+        });
+
+        Route::group([
+            'middleware' => ['cliente'],
+        ], function () {
+            Route::post('activate-plan/{id}', 'admin\PlanController@activate_plan');
+            
+            Route::group([
+                'middleware' => ['plan'],
+            ], function () {
+                
+            });
         });
     });
 
+  
     
 });
