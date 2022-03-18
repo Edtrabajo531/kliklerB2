@@ -19,7 +19,6 @@ class WalletController extends Controller
         $validator = Validator::make($request->all(), [
             "name" => 'required|unique:wallets',
             "address" => 'required',
-            
             "link" => 'nullable',
         ]);
 

@@ -16,21 +16,21 @@ class CreateUserPlansTable extends Migration
         Schema::create('user_plans', function (Blueprint $table) {
             $table->id();
             $table->enum('status',['vacio','imcompleto','revision','activo','finalizado'])->default('vacio');
-            $table->datetime('date_activated');
+            $table->datetime('date_activated')->nullable();
             $table->datetime('date_end')->nullable();
             $table->string('name');
             $table->longText('cost');
             $table->longText('profit');
-            $table->longText('total_profit');
             $table->bigInteger('duration');
-            $table->longText('charge_limit');
             $table->bigInteger('products');
             $table->bigInteger('plan_id');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->nullable();
+            $table->longText('inversion')->nullable();
+            $table->longText('total_profit')->nullable();
+            $table->longText('minimum_charge')->nullable();
+            $table->longText('minimum_charge_invertion')->nullable();
             // DATOS DEL PAGO
-
-            
             $table->timestamps();
         });
     }

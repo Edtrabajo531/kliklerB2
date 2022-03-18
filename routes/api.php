@@ -45,7 +45,7 @@ Route::group([
             Route::post('plan-store', 'admin\PlanController@store');
             Route::post('plan-update', 'admin\PlanController@update');
             Route::post('plan-delete/{id}', 'admin\PlanController@delete');
-
+            Route::post('update-license', 'admin\PlanController@update_license');
              // bancos
              Route::post('bank-accounts', 'admin\BankAccountController@list');
              Route::post('bank-account/{id}', 'admin\BankAccountController@get');
@@ -64,8 +64,13 @@ Route::group([
         Route::group([
             'middleware' => ['cliente'],
         ], function () {
-            Route::post('activate-plan/{id}', 'admin\PlanController@activate_plan');
-            
+            Route::post('activate-plan/{id}', 'front\UserPlanController@activate_plan');
+            Route::post('update-data-personal', 'front\UserController@update_data_personal');
+            Route::post('update-data-contact', 'front\UserController@update_data_contact');
+            Route::post('get-accounts-payment', 'front\UserPlanController@get_accounts_payment');
+            Route::post('get-plan-user', 'front\UserPlanController@get');
+            Route::post('insert-amount-plan', 'front\UserPlanController@insertAmount');
+
             Route::group([
                 'middleware' => ['plan'],
             ], function () {

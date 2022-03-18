@@ -13,13 +13,17 @@ use Mail;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Auth;
+use App\Models\State;
+use App\Models\City;
 
 class UserController extends Controller
 {
 
     public function getAuth(){
         $user = Auth::user();
-        return response()->json($user);
+        $states = State::all();
+        $cities = City::all();
+        return response()->json(compact('user','states','cities'));
     }
 
     public function viewMail(){
@@ -253,7 +257,7 @@ class UserController extends Controller
 
     }
 
-    public function verify_data_document(Request $request){
+    public function update_data_personal(Request $request){
         $user = Auth::user();
         $validator = Validator::make($request->all(), [
             'name' => 'unique:users,id,'.$user->id,
@@ -278,7 +282,7 @@ class UserController extends Controller
 
     }
 
-    public function verify_data_contact(Request $request){
+    public function update_data_contact(Request $request){
         $user = Auth::user();
         $validator = Validator::make($request->all(), [
             'phone' => 'required',

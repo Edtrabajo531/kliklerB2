@@ -18,9 +18,10 @@ class CreatePlansTable extends Migration
             $table->string('name');
             $table->longText('cost');
             $table->longText('profit');
-            $table->longText('total_profit');
+            // $table->longText('total_profit');
             $table->bigInteger('duration');
-            $table->longText('charge_limit');
+            // $table->longText('charge_limit');
+            
             $table->bigInteger('products');
             $table->timestamps();
         });

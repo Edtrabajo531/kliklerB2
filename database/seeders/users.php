@@ -38,9 +38,9 @@ class users extends Seeder
             'name'=>'Gratis',
             'cost'=>0,
             'profit'=>0,
-            'total_profit'=>0,
+          
             'duration'=>0,
-            'charge_limit'=>0,
+            
             'products'=>2
         ]);
         
@@ -48,9 +48,9 @@ class users extends Seeder
             'name'=>'AVATAR',
             'cost'=>50,
             'profit'=>5,
-            'total_profit'=>"2,5",
+            
             'duration'=>1,
-            'charge_limit'=>20,
+            
             'products'=>30
         ]);
 
@@ -58,9 +58,9 @@ class users extends Seeder
             'name'=>'ASSISTANT',
             'cost'=>100,
             'profit'=>"5,83",
-            'total_profit'=>"2,5",
+           
             'duration'=>1,
-            'charge_limit'=>20,
+            
             'products'=>30
         ]);
 
