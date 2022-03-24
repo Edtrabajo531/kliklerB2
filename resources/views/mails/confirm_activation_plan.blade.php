@@ -16,8 +16,7 @@
         }
 
         .button {
-
-            background: linear-gradient(to bottom, var(--red), var(--red-shadow));
+            background: linear-gradient(to bottom, #f82f2f, #ca0808);
             padding: 12px;
             color: white !important;
             text-decoration: none;
@@ -46,6 +45,12 @@
         p{
             font-size: 14px;
         }
+        .text-warning{
+            color: orange;
+        }
+        .text-success{
+            color:green;
+        }
     </style>
 </head>
 
@@ -57,28 +62,23 @@
         <div class="card"
             style="">
             <div style="text-align:center;">
-                <img style="width: 200px;" src="{{$message->embed(asset('images\logotipos\klikler-text-logo.png'))}}" class="logo-mail" style="" data-auto-embed="attachment"/> 
 
-                {{-- <img style="width: 200px" class="logo-mail" src="{!! asset('images\logotipos\klikler-text-logo.png') !!}" alt=""> --}}
-
+                <img src="{{ $message->embed(public_path() . '\images\logotipos\klikler-email.jpg') }}" />
                 <br>
-                <h3 class="text-primary" >Confirmación de cuenta KLIKLER</h3>
+                <h3 class="text-primary" >Resultado solicitud activación plan:  <span style="color: rgb(34, 34, 34)">{{ $data['plan']['name'] }}</span>  cuenta KLIKLER</h3>
 
-                <h4 class="text-dark">Para confirmar cuenta "KLIKLER" haga clic en el siguiente botón: </h4>
-                <br>
-
-                {{-- <a href="" class="button"> CONFIRMAR CUENTA KLIKLER </a> --}}
-                 <a class="button"href="{{ env('ENDPOINT_BACK') }}confirmar-correo/{{ $data['email'] }}/{{ $data['token'] }}"
-                    >  CONFIRMAR CUENTA KLIKLER </a>
-
-                <br>
-                <br>
-                <h4 class="text-dark">o copie y pegue en cualquier navegador: </h4>
+                <h4 class="text-dark">Su solicitud del plan: "{{ $data['plan']['name'] }}" ha sido <span class="text-success">confirmada.</span> </h4>
+                <p>El plan "{{ $data['plan']['name'] }}" ya está activo en su cuenta.</p>
                 
-                <h5 class="text-red-l" >{{ env('ENDPOINT_BACK') }}confirmar-correo/{{ $data['email'] }}/{{ $data['token'] }}</h5>
-                
-                <p class="text-dark">Si usted no desea crear / confirmar una cuenta de Bitcoin Ecuador
-                    ignore este mensaje. </p>
+                @if($data['plan']['observations'])
+                <p>OBSERVACIONES: <span style="color:grey"> {{ $data['plan']['observations'] }} </span> </p>
+                @endif
+
+                <!-- <a href="" class="button"> IR A KLIKLER </a> -->
+                  <a class="button"href="{{ env('ENDPOINT_FRONT') }}">  IR A KLIKLER </a>
+
+                <br>
+                <br>
 
                 <small class="text-dark">
                     Esto es un mensaje automático, no responda este mensaje.

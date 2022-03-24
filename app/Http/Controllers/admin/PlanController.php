@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers\admin;
-
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\models\Plan;
@@ -11,9 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use Auth;
 class PlanController extends Controller
 {
-   
     // Admin
-
     public function update_license(Request $request){
         $validator = Validator::make($request->all(), [
             "cost" => 'required',
@@ -24,20 +21,27 @@ class PlanController extends Controller
         }
 
         $license = License::first();
-        $license->cost = $request->cost;
+        $license->cost = str_replace(',','.',$request->cost);
         $license->save();
 
         return response()->json(['result'=>'ok','message'=>'Licencia actualizada con éxito.']);
-
     }
 
     public function list(){
         $list = Plan::all();
         $license = License::first()->cost;
+        $planReview = Userplan::where('status','revision')->where('user_id',Auth::user()->id)->first();
+        return response()->json(compact('list','license','planReview'));
+    }
+    public function listAdmin(){
+        $list = Plan::all();
+        $license = License::first()->cost;
+       
         return response()->json(compact('list','license'));
     }
-
+    
     public function store(Request $request){
+        
         $validator = Validator::make($request->all(), [
             "name" => 'required|unique:plans',
             "cost" => 'required',
@@ -52,11 +56,9 @@ class PlanController extends Controller
 
         $user = new Plan;
         $user->name = $request->name;
-        $user->cost = $request->cost;
-        $user->profit = $request->profit;
-        
+        $user->cost =  str_replace(',','.',$request->cost);
+        $user->profit =  str_replace(',','.',$request->profit);
         $user->duration = $request->duration;
-       
         $user->products = $request->products;
         $user->save();
 
@@ -71,7 +73,6 @@ class PlanController extends Controller
             "cost" => 'required',
             "profit" => 'required',
             "duration" => 'required',
-            
             "products"=> 'required',
         ]);
 
@@ -81,14 +82,11 @@ class PlanController extends Controller
 
         $user =  Plan::find($id);
         $user->name = $request->name;
-        $user->cost = $request->cost;
-        $user->profit = $request->profit;
-      
+        $user->cost =  str_replace(',','.',$request->cost);
+        $user->profit =  str_replace(',','.',$request->profit);
         $user->duration = $request->duration;
-        
         $user->products = $request->products;
         $user->save();
-
        
         return response()->json(['result'=>'ok','message'=>'Datos actualizados con éxito.']);
     }

@@ -16,12 +16,11 @@ class CreatePlansTable extends Migration
         Schema::create('plans', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->longText('cost');
-            $table->longText('profit');
+            $table->double('cost');
+            $table->double('profit');
             // $table->longText('total_profit');
             $table->bigInteger('duration');
             // $table->longText('charge_limit');
-            
             $table->bigInteger('products');
             $table->timestamps();
         });

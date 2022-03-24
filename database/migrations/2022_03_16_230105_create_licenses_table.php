@@ -15,7 +15,8 @@ class CreateLicensesTable extends Migration
     {
         Schema::create('licenses', function (Blueprint $table) {
             $table->id();
-            $table->longText('cost');
+            $table->double('cost');
+            
             $table->timestamps();
         });
     }

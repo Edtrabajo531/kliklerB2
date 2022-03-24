@@ -24,7 +24,6 @@ class CreateUsersTable extends Migration
             $table->string('token_email')->nullable();
             // $table->string('nationality')->nullable();
             $table->string('document_type')->nullable();
-           
             $table->bigInteger('document_number')->nullable();
             $table->date('date_of_birth')->nullable();
             $table->integer('age')->nullable();
@@ -44,6 +43,17 @@ class CreateUsersTable extends Migration
             $table->enum('user_verified',[0,'waiting',1,'reject'])->default(0);
             $table->longText('token_password')->nullable();
             $table->timestamp('date_token_password')->nullable();
+            // LICENCIA
+            $table->enum('license_pay',['Si','No'])->default('No');
+            $table->bigInteger('total_license')->nullable();
+              // SALDO
+           
+            // $table->double('inversion_total')->default(0);
+            // $table->double('inversion_available')->default(0);
+            // $table->double('earnings_total')->default(0);
+            // $table->double('earnings_available')->default(0);
+            // $table->double('minimum_charge')->default(0);
+            
             $table->rememberToken();
             $table->timestamps();
         });

@@ -28,7 +28,8 @@ class UserController extends Controller
 
     public function viewMail(){
         // return "XX";
-        return view('mails.confirm_email');
+        
+        return view('mails.confirm_activation_plan');
     }
     public function pruebaMail(){
         $data = ['data'=>['email'=>"eavc53189@gmail.com",'token'=>"wrewr"]];

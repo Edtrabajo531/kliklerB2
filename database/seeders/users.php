@@ -57,7 +57,7 @@ class users extends Seeder
         DB::table('plans')->insert([
             'name'=>'ASSISTANT',
             'cost'=>100,
-            'profit'=>"5,83",
+            'profit'=>5.83,
            
             'duration'=>1,
             

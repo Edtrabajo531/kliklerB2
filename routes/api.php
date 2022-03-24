@@ -42,6 +42,9 @@ Route::group([
         Route::group([
             'middleware' => ['admin'],'prefix'=>'admin'
         ], function () {
+
+            // plan admin
+            Route::post('plans', 'admin\PlanController@listAdmin');
             Route::post('plan-store', 'admin\PlanController@store');
             Route::post('plan-update', 'admin\PlanController@update');
             Route::post('plan-delete/{id}', 'admin\PlanController@delete');
@@ -59,23 +62,47 @@ Route::group([
               Route::post('wallet-store', 'admin\WalletController@store');
               Route::post('wallet-update', 'admin\WalletController@update');
               Route::post('wallet-delete/{id}', 'admin\WalletController@delete');
+
+              //  USER PLAN ADMIN
+              Route::post('list-user-plan', 'front\UserPlanController@list');
+              Route::post('get-plan-user-admin', 'front\UserPlanController@getPlanAdmin');
+              Route::post('activate-plan', 'front\UserPlanController@activatePlan');
+              Route::post('reject-plan', 'front\UserPlanController@rejectPlan');
+              
+              
         });
 
         Route::group([
             'middleware' => ['cliente'],
         ], function () {
+            //  USER PLAN FRONT
+            // Route::post('balance', 'front\BalancePlanController@get');
+
+            Route::post('my-plan', 'front\UserPlanController@my_plan');
+            
             Route::post('activate-plan/{id}', 'front\UserPlanController@activate_plan');
             Route::post('update-data-personal', 'front\UserController@update_data_personal');
             Route::post('update-data-contact', 'front\UserController@update_data_contact');
             Route::post('get-accounts-payment', 'front\UserPlanController@get_accounts_payment');
             Route::post('get-plan-user', 'front\UserPlanController@get');
             Route::post('insert-amount-plan', 'front\UserPlanController@insertAmount');
+            Route::post('insert-accounts-payment', 'front\UserPlanController@insertAccountsPayment');
+            Route::post('images-pay-plan', 'front\UserPlanController@getImages');
 
+            Route::post('upload-file-userplan', 'front\UserPlanController@upload_file');
+            Route::post('delete-file-userplan', 'front\UserPlanController@delete_file');
+            
+            Route::post('request-activation-userplan', 'front\UserPlanController@request_activation');
+            Route::post('plan-under-review', 'front\UserPlanController@plan_under_review');
+            
             Route::group([
                 'middleware' => ['plan'],
             ], function () {
                 
             });
+
+           
+            
         });
     });
 
