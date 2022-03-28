@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\models\Plan;
-use App\models\Userplan;
-use App\models\License;
+use App\Models\Plan;
+use App\Models\UserPlan;
+use App\Models\License;
 use Illuminate\Support\Facades\Validator;
 use Auth;
 class PlanController extends Controller
@@ -30,7 +30,7 @@ class PlanController extends Controller
     public function list(){
         $list = Plan::all();
         $license = License::first()->cost;
-        $planReview = Userplan::where('status','revision')->where('user_id',Auth::user()->id)->first();
+        $planReview = UserPlan::where('status','revision')->where('user_id',Auth::user()->id)->first();
         return response()->json(compact('list','license','planReview'));
     }
     public function listAdmin(){

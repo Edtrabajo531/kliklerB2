@@ -28,8 +28,12 @@ public function list(){
         "users.name as user_name"
     )
     ->leftJoin("users", "users.id", "=", "user_plans.user_id")
+    ->where('user_plans.status','revision')
+    ->orWhere('user_plans.status','rechazado')
+    ->orWhere('user_plans.status','finalizado')
+    ->orWhere('user_plans.status','activo')
     ->get();
-    
+
     return response()->json(['list' => $plan]);
 }
 
@@ -50,7 +54,7 @@ public function getPlanAdmin(Request $request){
     return response()->json(compact('userplan','images','user'));
 }
 
-// activar plan
+// activar plan admin
 public function activatePlan(Request $request){
     
     $userplan = UserPlan::find($request->id);
@@ -67,41 +71,26 @@ public function activatePlan(Request $request){
     $userplan->status = 'activo';
     $userplan->save();
 
-    $inversionActive = Inversion::where('user_id',$userplan->user_id)->where('status','active')->first();
-    if($inversionActive){
-        $inversionActive->status = 'completed';
-        $inversionActive->save();
+
+    $inversionLast = Inversion::where('user_id',$userplan->user_id)->where('status','last')->first();
+    if($inversionLast){
+        $inversionLast->status = 'other';
+        $inversionLast->save();
     }
+    
     $inversion = new Inversion;
     $inversion->date_start = \Carbon\Carbon::now()->format('Y-m-d H:i:s');
     $inversion->date_end = $userplan->date_end;
     $inversion->user_plan_id = $userplan->id;
     $inversion->user_id = $userplan->user_id;
     $inversion->inversion = $userplan->inversion;
-
-    $inversion->profit = $userplan->profit;
-    $inversion->total_profit = $userplan->total_profit;
-    // $inversions = Inversion::where('userplan_id',$userplan->id)->get();
-    // foreach($inversions as $inv){
-    //     $inv->inersion;
-    // }
-    // $inversion->inversion_total = $inversion_total;
-    
-    $inversion->inversion_total = $userplan->inversion;
-    $inversion->status = "activo";
     $inversion->save();
 
-    // $user = User::find($inversion->user_id);
-   
-    
-    // $inversions = Inversion::where('user_id',Auth::user()->id)->where('inversion','!=',0)->get();
-        
-    // $totalInversions = 0;
-    // foreach($inversions as $inv){
-    //     $totalInversions +=  $inv->inversion;
-    // }
-    // $user->inversion_total =  $totalInversions;
-    // $user->save();
+    $user = User::find($inversion->user_id);
+    $user->inversion_total = $user->inversion_total + $inversion->inversion;
+    $user->minimum_charge = $userplan->minimum_charge;
+    $user->save();
+
 
     $data = ['data'=>['plan'=>$userplan]];
     Mail::send('mails.confirm_activation_plan',$data,function($message){
@@ -128,7 +117,7 @@ public function rejectPlan(Request $request){
 
 // front
 public function plan_under_review(Request $request){
-    $plan = Userplan::where('status','revision')->where('user_id',Auth::user()->id)->first();
+    $plan = UserPlan::where('status','revision')->where('user_id',Auth::user()->id)->first();
     if(!$plan){
         $plan = null;
     }
@@ -136,6 +125,11 @@ public function plan_under_review(Request $request){
 }
 
 public function request_activation(Request $request){
+    $planActive = UserPlan::where('user_id',Auth::user()->id)->where('status','revision')->first();
+    if($planActive){
+        return response()->json(['error' => 'Ya posee un plan activo.']); 
+    }
+
     $validator = Validator::make($request->all(), [
         'id' => 'required',
     ]);
@@ -144,7 +138,7 @@ public function request_activation(Request $request){
         return response()->json(['result' => 'error', 'errors' => $validator->errors()]);
     }
 
-    $userplan = Userplan::find($request->id);
+    $userplan = UserPlan::find($request->id);
     $userplan->status = 'revision';
     $userplan->date_request = \Carbon\Carbon::now()->format('Y-m-d H:i:s');
     $userplan->save();
@@ -293,7 +287,7 @@ public function insertAccountsPayment(Request $request){
         return response()->json(['result' => 'error-validation', 'errors' => $validator->errors()]);
     }
 
-    $userplan = Userplan::find($request->id);
+    $userplan = UserPlan::find($request->id);
     $userplan->bank_id =  $request->bank_id;
     $userplan->wallet_id =  $request->wallet_id;
     // BANK
@@ -324,7 +318,7 @@ public function insertAmount(Request $request){
         return response()->json(['result' => 'error-validation', 'errors' => json_encode($validator->errors())]);
     }
 
-    $userplan = Userplan::find($request->id);
+    $userplan = UserPlan::find($request->id);
     $inversion =  str_replace(',','.',$request->inversion);
     
     if (floatval($inversion) < floatval( $userplan->cost)) {
@@ -355,10 +349,16 @@ public function insertAmount(Request $request){
 
 }
 
+// Configurar plan antes de activar
 public function activate_plan(Request $request){
-    $planReview = Userplan::where('status','revision')->where('user_id',Auth::user()->id)->first();
+    $planReview = UserPlan::where('status','revision')->where('user_id',Auth::user()->id)->first();
     if($planReview){
         return response()->json("plan-review");
+    }
+
+    $planActive = UserPlan::where('status','activo')->where('user_id',Auth::user()->id)->first();
+    if($planActive){
+        return response()->json("plan-active");
     }
 
     $plan = Plan::find($request->id);
@@ -367,12 +367,12 @@ public function activate_plan(Request $request){
         return 'no-existe';
     }
 
-    $planPending =  Userplan::where('user_id',Auth::user()->id)->where('status','incompleto')->where('plan_id',$plan->id)->first();
+    $planPending =  UserPlan::where('user_id',Auth::user()->id)->where('status','incompleto')->where('plan_id',$plan->id)->first();
     if($planPending != null){
         $userplan = $planPending;
     }else{
         // borrar inompleto
-        $planPending =  Userplan::where('user_id',Auth::user()->id)->where('status','incompleto')->first();
+        $planPending =  UserPlan::where('user_id',Auth::user()->id)->where('status','incompleto')->first();
         if($planPending){
             $images = Image::where('userplan_id', $planPending->id)->get();
             foreach($images as $img){
@@ -383,10 +383,10 @@ public function activate_plan(Request $request){
             $planPending->delete();
         }
 
-        $planUserEmpty = Userplan::where('user_id',Auth::user()->id)->where('status','vacio')->where('plan_id',$plan->id)->first();
+        $planUserEmpty = UserPlan::where('user_id',Auth::user()->id)->where('status','vacio')->where('plan_id',$plan->id)->first();
         if(!$planUserEmpty){
             // Borrar vacio
-            $planUserEmpty = Userplan::where('user_id',Auth::user()->id)->where('status','vacio')->first();
+            $planUserEmpty = UserPlan::where('user_id',Auth::user()->id)->where('status','vacio')->first();
             if($planUserEmpty){
                 $images = Image::where('userplan_id', $planUserEmpty->id)->get();
                 foreach($images as $img){
@@ -397,7 +397,7 @@ public function activate_plan(Request $request){
                 $planUserEmpty->delete();
             }
 
-            $userplan = new Userplan;
+            $userplan = new UserPlan;
             $userplan->name = $plan->name;
             $userplan->cost = $plan->cost;
             // $userplan->inversion = ;

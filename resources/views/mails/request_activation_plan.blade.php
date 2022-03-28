@@ -58,7 +58,7 @@
             style="">
             <div style="text-align:center;">
 
-                <img src="{{ $message->embed(public_path() . '\images\logotipos\klikler-email.jpg') }}" />
+            <img src="{{ $message->embed(public_path() . '/images/logotipos/klikler-email.jpg') }}" />
                 <br>
                 <h3 class="text-primary" >Solicitud de activación plan:  <span style="color: rgb(34, 34, 34)">{{ $data['plan']['name'] }}</span>  cuenta KLIKLER</h3>
 

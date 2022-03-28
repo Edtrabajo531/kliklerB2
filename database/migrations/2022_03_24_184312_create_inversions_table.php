@@ -24,12 +24,10 @@ class CreateInversionsTable extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
             $table->double('inversion')->default(0);
-            // inversion total es la actual + otra inversion anterior del plan
-            $table->double('inversion_total')->default(0);
-            $table->double('total_profit')->default(0);
-            $table->double('profit')->default(0);
-            $table->enum('status',['activo','finalizado']);
+            $table->enum('status',['last','other'])->default('last');
+
             $table->timestamps();
+          
         });
     }
 

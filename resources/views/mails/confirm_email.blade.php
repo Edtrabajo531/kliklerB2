@@ -58,8 +58,7 @@
             style="">
             <div style="text-align:center;">
 
-                <img src="{{ $message->embed(public_path() . '\images\logotipos\klikler-email.jpg') }}" />
-                
+            <img src="{{ $message->embed(public_path() . '/images/logotipos/klikler-email.jpg') }}" />
                 
                 <br>
                 <h3 class="text-primary" >Confirmación de cuenta KLIKLER</h3>
@@ -67,7 +66,7 @@
                 <h4 class="text-dark">Para confirmar cuenta "KLIKLER" haga clic en el siguiente botón: </h4>
                 <br>
 
-                {{-- <a href="" class="button"> CONFIRMAR CUENTA KLIKLER </a> --}}
+                <!-- <a href="" class="button"> CONFIRMAR CUENTA KLIKLER </a> -->
                   <a class="button"href="{{ env('ENDPOINT_BACK') }}confirmar-correo/{{ $data['email'] }}/{{ $data['token'] }}">  CONFIRMAR CUENTA KLIKLER </a>
 
                 <br>

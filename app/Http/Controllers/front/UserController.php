@@ -15,15 +15,23 @@ use Illuminate\Support\Str;
 use Auth;
 use App\Models\State;
 use App\Models\City;
+use App\Models\UserPlan;
 
 class UserController extends Controller
 {
-
+    
     public function getAuth(){
         $user = Auth::user();
         $states = State::all();
         $cities = City::all();
-        return response()->json(compact('user','states','cities'));
+        $user_plan = UserPlan::where('status','activo')->where('user_id',Auth::user()->id)->first();
+        $porcentage_month = 0;
+        $profit_month = 0;
+        if($user_plan){
+            $porcentage_month = $user_plan->profit;
+            $profit_month = $user_plan->minimum_charge;
+        }
+        return response()->json(compact('user','states','cities','porcentage_month','profit_month'));
     }
 
     public function viewMail(){
@@ -198,15 +206,12 @@ class UserController extends Controller
         $user->save();
 
         $data = ['data'=>['email'=>$user->email,'token'=>$token_email]];
-        try{
-            Mail::send('mails.confirm_email',$data,function($message) use($user){
-                $message->subject('Confirma tu cuenta de KLIKLER');
-                $message->to("eavc53189@gmail.com");
-            });
-        }
-        catch(\Exception $e){
-            return response()->json(['result'=>'error','error'=>$e]);
-        }
+
+        Mail::send('mails.confirm_email',$data,function($message) use($user){
+            $message->subject('Confirma tu cuenta de KLIKLER');
+            $message->to($user->email);
+        });
+  
 
         return response()->json(['result'=>'ok','message'=>'Se ha enviado un mensaje a su correo electrónico con el código de confirmación para completar el registro.']);
     }

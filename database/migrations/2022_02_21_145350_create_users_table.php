@@ -48,17 +48,18 @@ class CreateUsersTable extends Migration
             $table->bigInteger('total_license')->nullable();
               // SALDO
            
-            // $table->double('inversion_total')->default(0);
-            // $table->double('inversion_available')->default(0);
-            // $table->double('earnings_total')->default(0);
-            // $table->double('earnings_available')->default(0);
-            // $table->double('minimum_charge')->default(0);
+            $table->double('inversion_total')->default(0);
+            $table->double('inversion_available')->default(0);
+            $table->double('earnings_total')->default(0);
+            $table->double('earnings_to_date')->default(0);
+            $table->double('earnings_available')->default(0);
+             $table->double('minimum_charge')->default(0);
             
             $table->rememberToken();
             $table->timestamps();
         });
     }
-
+    // draw upon
     /**
      * Reverse the migrations.
      *
