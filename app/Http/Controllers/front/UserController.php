@@ -33,6 +33,10 @@ class UserController extends Controller
         }
         return response()->json(compact('user','states','cities','porcentage_month','profit_month'));
     }
+    
+    public function prueba(){
+         return "PRUEBA";
+    }
 
     public function viewMail(){
         // return "XX";
