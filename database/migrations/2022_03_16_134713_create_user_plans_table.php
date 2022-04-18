@@ -27,6 +27,8 @@ class CreateUserPlansTable extends Migration
             $table->bigInteger('plan_id');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->nullable();
+
+           
             $table->double('inversion')->nullable();
             $table->double('total_profit')->nullable();
             $table->double('minimum_charge')->nullable();

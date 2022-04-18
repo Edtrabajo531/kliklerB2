@@ -58,6 +58,7 @@ public function getPlanAdmin(Request $request){
 public function activatePlan(Request $request){
     
     $userplan = UserPlan::find($request->id);
+    
     $planActive = UserPlan::where('user_id',$userplan->user_id)->where('status','activo')->first();
 
     if($planActive){
@@ -70,6 +71,7 @@ public function activatePlan(Request $request){
     $userplan->observations = "";
     $userplan->status = 'activo';
     $userplan->save();
+
 
 
     $inversionLast = Inversion::where('user_id',$userplan->user_id)->where('status','last')->first();
@@ -87,8 +89,10 @@ public function activatePlan(Request $request){
     $inversion->save();
 
     $user = User::find($inversion->user_id);
+    $user->points = $user->points + $userplan->license;
     $user->inversion_total = $user->inversion_total + $inversion->inversion;
     $user->minimum_charge = $userplan->minimum_charge;
+    $user->license_pay = 'Si';
     $user->save();
 
 
@@ -331,11 +335,15 @@ public function insertAmount(Request $request){
     $userplan->date_end = \Carbon\Carbon::now()->addMonth($userplan->duration)->format('Y-m-d H:i:s');
     $userplan->inversion = $inversion;
 
-    $userplan->pay_in_dollars = ($inversion * 25) / 100;
-    $userplan->pay_in_btc = ($inversion * 75) / 100;
-    $license = License::first()->cost;
+    /*$userplan->pay_in_dollars = ($inversion * 25) / 100;
+    $userplan->pay_in_btc = ($inversion * 75) / 100;*/
 
-    if(Auth::user()->license_pay == 'Si'){
+    /*$userplan->pay_in_dollars = ($inversion * 25) / 100;
+    $userplan->pay_in_btc = ($inversion * 75) / 100;*/
+    
+    $license = License::first()->cost;
+    $user = Auth::user();
+    if($user->license_pay == 'Si'){
         $license = 0;
     }
     

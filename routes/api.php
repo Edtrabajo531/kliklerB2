@@ -69,6 +69,15 @@ Route::group([
               Route::post('activate-plan', 'front\UserPlanController@activatePlan');
               Route::post('reject-plan', 'front\UserPlanController@rejectPlan');
               
+            //   monedas
+            Route::post('list-coins', 'admin\CoinController@list_coins');
+            Route::post('coins-store', 'admin\CoinController@coins_store');
+            Route::post('coins-update', 'admin\CoinController@coins_update');
+            Route::post('coins-delete', 'admin\CoinController@coins_delete');
+            
+
+
+
               
         });
 

@@ -47,7 +47,7 @@ class CreateUsersTable extends Migration
             $table->enum('license_pay',['Si','No'])->default('No');
             $table->bigInteger('total_license')->nullable();
               // SALDO
-           
+            $table->double('points')->default(0);
             $table->double('inversion_total')->default(0);
             $table->double('inversion_available')->default(0);
             $table->double('earnings_total')->default(0);
